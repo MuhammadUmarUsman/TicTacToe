@@ -6,6 +6,7 @@ A simple TicTacToe game implemented in React. Two players (X and O) can play the
 - Two players can alternate between X and O.
 - The game checks for a winner after every move (rows, columns, diagonals).
 - If the board is full and no player wins, the game declares a draw.
+- Users can undo/redo there moves, as moves history is being tracked
 - Users can reset the game after a win or a draw.
 
 ## Installation
@@ -73,4 +74,4 @@ Manages project dependencies and configurations.
 1. Clone the repository and run `npm start`.
 2. Click on any square to place your mark (X or O).
 3. The game will automatically check for a winner after every move.
-4. When the game ends (win or draw), a button will appear to start a new game.
+5. When the game ends (win or draw), a button will appear to start a new game.
