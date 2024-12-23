@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import BoxContainer from './components/boxContainer'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from 'react';
+import './App.css';
+import BoxContainer from './components/boxContainer';
+import GameControls from './components/gameControls.jsx'; 
 
 function App() {
   const [board, setBoard] = useState([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
   const [moveX, setMoveX] = useState(true);
   const [winner, setWinner] = useState(null);
   const [boardList, setBoardList] = useState([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]);
-  const [removedList, setRemovedList] = useState([]); 
+  const [removedList, setRemovedList] = useState([]);
 
   const checkWinner = (board) => {
     for (let i = 0; i < 3; i++) {
@@ -20,7 +19,7 @@ function App() {
         return board[0][i];
       }
     }
-    
+
     if (board[0][0] !== -1 && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
       return board[0][0];
     }
@@ -68,7 +67,7 @@ function App() {
     setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
     setWinner(null);
     setRemovedList([]);
-    setMoveX(true)
+    setMoveX(true);
   };
 
   const goBack = () => {
@@ -84,26 +83,24 @@ function App() {
   };
 
   const goForward = () => {
-    if (removedList.length === 0) return; 
+    if (removedList.length === 0) return;
 
     const nextBoardState = removedList[removedList.length - 1];
-    setRemovedList((prevRemoved) => prevRemoved.slice(0, removedList.length - 1)); 
+    setRemovedList((prevRemoved) => prevRemoved.slice(0, removedList.length - 1));
     setBoardList((prevBoardList) => [...prevBoardList, nextBoardState]);
     setBoard(nextBoardState);
-    setMoveX(!moveX); 
+    setMoveX(!moveX);
   };
 
   return (
     <div className='App'>
-      {!winner && <div className='btn-container'>
-        <button className='backbtn' onClick={goBack}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
-        <h2 className='turn'>Turn <span>{moveX ? "X" : "O"}</span></h2>
-        <button className='backbtn' onClick={goForward}>
-          <FontAwesomeIcon icon={faArrowRight} />
-        </button>
-      </div>}
+      {!winner && (
+        <GameControls
+          moveX={moveX}
+          goBack={goBack}
+          goForward={goForward}
+        />
+      )}
 
       <div className='container'>
         {board.map((rows, i) =>
@@ -118,7 +115,7 @@ function App() {
           ))
         )}
       </div>
-      {!winner &&<button className='btn bgyellow' onClick={newGame}>Reset</button>}
+      {!winner && <button className='btn bgyellow' onClick={newGame}>Reset</button>}
       {winner && (
         <div className='win'>
           <h2>{winner === 'Draw' ? "It's a Draw!" : `Winner: ${winner}!`}</h2>
