@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import BoxContainer from './components/boxContainer'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const [board, setBoard] = useState([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]])
-  const [moveX, setMoveX] = useState(true);
-  const [winner, setWinner] = useState(null); 
+  const [moveX, setMoveX] = useState(true)
+  const [winner, setWinner] = useState(null) 
+  const [boardList,setBoardList] = useState([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]])
 
   const checkWinner = (board) => {
     for (let i = 0; i < 3; i++) {
@@ -48,7 +51,10 @@ function App() {
       return row;
     });
 
-    setBoard(newBoard);
+    setBoard(newBoard)
+    setBoardList((prevBoardList) => {
+      return [...prevBoardList, newBoard]
+    })
     setMoveX(!moveX);
 
     const gameWinner = checkWinner(newBoard);
@@ -58,26 +64,37 @@ function App() {
   };
 
   const newGame = () =>{
+    setBoardList([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]])
     setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]])
     setWinner(null)
   }
 
+    const goBack = () => {
+      if (boardList.length <= 1) return
+      if (winner) return
+      const updatedBoardList = boardList.slice(0, boardList.length - 1)
+      setBoardList(updatedBoardList)
+  
+      setBoard(updatedBoardList[updatedBoardList.length - 1])
+  
+      setMoveX(!moveX)
+    };
+  
   return (
     <div className='App'>
+      <button className='back-btn' onClick={goBack}><FontAwesomeIcon icon={faArrowLeft} /></button>
       <div className='container'>
-        {board.map((rows, i) => {
-          return rows.map((value, j) => {
-            return (
-              <BoxContainer
-                key={`${i},${j}`}
-                row={i}
-                col={j}
-                value={value}
-                handleClick={handleClick}
-              />
-            );
-          });
-        })}
+      {board.map((rows, i) =>
+          rows.map((value, j) => (
+            <BoxContainer
+              key={`${i},${j}`}
+              row={i}
+              col={j}
+              value={value}
+              handleClick={handleClick}
+            />
+          ))
+        )}
       </div> 
         {winner &&
         <div className='win'>
