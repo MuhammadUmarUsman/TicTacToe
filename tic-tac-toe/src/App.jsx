@@ -64,7 +64,7 @@ function App() {
   };
 
   const newGame = () => {
-    setBoardList([[[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]]);
+    setBoardList([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]);
     setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
     setWinner(null);
     setRemovedList([]);
@@ -75,6 +75,8 @@ function App() {
 
     const updatedBoardList = boardList.slice(0, boardList.length - 1);
     const previousBoardState = boardList[updatedBoardList.length - 1];
+
+    console.log(previousBoardState)
 
     setRemovedList((prevRemoved) => [...prevRemoved, boardList[boardList.length - 1]]);
     setBoardList(updatedBoardList);
