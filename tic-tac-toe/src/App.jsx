@@ -75,13 +75,11 @@ function App() {
     if (boardList.length <= 1 || winner) return;
 
     const updatedBoardList = boardList.slice(0, boardList.length - 1);
-    const previousBoardState = boardList[updatedBoardList.length - 1];
-
-    console.log(previousBoardState)
+    const boardState = updatedBoardList[updatedBoardList.length - 1];
 
     setRemovedList((prevRemoved) => [...prevRemoved, boardList[boardList.length - 1]]);
     setBoardList(updatedBoardList);
-    setBoard(previousBoardState);
+    setBoard(boardState);
     setMoveX(!moveX);
   };
 
@@ -97,7 +95,7 @@ function App() {
 
   return (
     <div className='App'>
-      <div className='btn-container'>
+      {!winner && <div className='btn-container'>
         <button className='backbtn' onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
@@ -105,7 +103,7 @@ function App() {
         <button className='backbtn' onClick={goForward}>
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
-      </div>
+      </div>}
 
       <div className='container'>
         {board.map((rows, i) =>
