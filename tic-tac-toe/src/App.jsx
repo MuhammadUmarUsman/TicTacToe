@@ -56,7 +56,7 @@ function App() {
     setBoardList((prevBoardList) => [...prevBoardList, newBoard]);
     setMoveX(!moveX);
     setRemovedList([]);
-    
+
     const gameWinner = checkWinner(newBoard);
     if (gameWinner !== null) {
       setWinner(gameWinner === 'draw' ? 'Draw' : gameWinner === 1 ? 'X' : 'O');
@@ -95,10 +95,10 @@ function App() {
   return (
     <div className='App'>
       <div className='btn-container'>
-        <button className='back-btn' onClick={goBack}>
+        <button className='btn' onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
-        <button className='back-btn' onClick={goForward}>
+        <button className='btn' onClick={goForward}>
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
@@ -116,11 +116,11 @@ function App() {
           ))
         )}
       </div>
-
+      {!winner &&<button className='btn bgyellow' onClick={newGame}>Reset</button>}
       {winner && (
         <div className='win'>
           <h2>{winner === 'Draw' ? "It's a Draw!" : `Winner: ${winner}`}</h2>
-          <button onClick={newGame}>New Game</button>
+          <button className='btn bggreen bold' onClick={newGame}>New Game</button>
         </div>
       )}
     </div>

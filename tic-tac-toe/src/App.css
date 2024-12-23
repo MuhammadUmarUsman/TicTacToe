@@ -46,14 +46,26 @@
   display: flex;
   justify-content: space-between;
 }
-.back-btn{
+.btn{
+  width:110px;
   background: black;
   color: white;
   padding:10px;
   border: none;
-  align-self: flex-start;
+  text-align: center;
 }
-
-.back-btn:hover{
+.bgyellow{
+  background-color:orange;
+}
+.bggreen{
+  background-color: green;
+}
+.clrblack{
+  color: #000;
+}
+.bold{
+  font-weight: bold;
+}
+.btn:hover{
   cursor: pointer;
 }
