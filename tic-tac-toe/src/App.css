@@ -41,14 +41,17 @@
 .container-item:hover{
   cursor: pointer;
 }
-
+.btn-container{
+  width:650px;
+  display: flex;
+  justify-content: space-between;
+}
 .back-btn{
   background: black;
   color: white;
   padding:10px;
   border: none;
   align-self: flex-start;
-  margin-left: 40px;
 }
 
 .back-btn:hover{

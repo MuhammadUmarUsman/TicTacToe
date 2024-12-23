@@ -5,10 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
-  const [board, setBoard] = useState([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]])
-  const [moveX, setMoveX] = useState(true)
-  const [winner, setWinner] = useState(null) 
-  const [boardList,setBoardList] = useState([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]])
+  const [board, setBoard] = useState([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
+  const [moveX, setMoveX] = useState(true);
+  const [winner, setWinner] = useState(null);
+  const [boardList, setBoardList] = useState([[[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]]);
+  const [removedList, setRemovedList] = useState([]); 
 
   const checkWinner = (board) => {
     for (let i = 0; i < 3; i++) {
@@ -19,7 +20,7 @@ function App() {
         return board[0][i];
       }
     }
-
+    
     if (board[0][0] !== -1 && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
       return board[0][0];
     }
@@ -32,7 +33,6 @@ function App() {
     }
 
     return null;
-    
   };
 
   const handleClick = (i, j) => {
@@ -44,7 +44,7 @@ function App() {
       if (rowIndex === i) {
         return row.map((cell, colIndex) => {
           if (colIndex === j) {
-            return moveX ? 1 : 0; 
+            return moveX ? 1 : 0;
           }
           return cell;
         });
@@ -52,40 +52,59 @@ function App() {
       return row;
     });
 
-    setBoard(newBoard)
-    setBoardList((prevBoardList) => {
-      return [...prevBoardList, newBoard]
-    })
+    setBoard(newBoard);
+    setBoardList((prevBoardList) => [...prevBoardList, newBoard]);
     setMoveX(!moveX);
-
+    setRemovedList([]);
+    
     const gameWinner = checkWinner(newBoard);
     if (gameWinner !== null) {
       setWinner(gameWinner === 'draw' ? 'Draw' : gameWinner === 1 ? 'X' : 'O');
     }
   };
 
-  const newGame = () =>{
-    setBoardList([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]])
-    setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]])
-    setWinner(null)
-  }
+  const newGame = () => {
+    setBoardList([[[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]]);
+    setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
+    setWinner(null);
+    setRemovedList([]);
+  };
 
-    const goBack = () => {
-      if (boardList.length <= 1) return
-      if (winner) return
-      const updatedBoardList = boardList.slice(0, boardList.length - 1)
-      setBoardList(updatedBoardList)
-  
-      setBoard(updatedBoardList[updatedBoardList.length - 1])
-  
-      setMoveX(!moveX)
-    };
-  
+  const goBack = () => {
+    if (boardList.length <= 1 || winner) return;
+
+    const updatedBoardList = [...boardList].slice(0, boardList.length - 1);
+    const previousBoardState = updatedBoardList[updatedBoardList.length - 1];
+
+    setRemovedList((prevRemoved) => [...prevRemoved, boardList[boardList.length - 1]]);
+    setBoardList(updatedBoardList);
+    setBoard(previousBoardState);
+    setMoveX(!moveX);
+  };
+
+  const goForward = () => {
+    if (removedList.length === 0) return; 
+
+    const nextBoardState = removedList[removedList.length - 1];
+    setRemovedList((prevRemoved) => prevRemoved.slice(0, removedList.length - 1)); 
+    setBoardList((prevBoardList) => [...prevBoardList, nextBoardState]);
+    setBoard(nextBoardState);
+    setMoveX(!moveX); 
+  };
+
   return (
     <div className='App'>
-      <button className='back-btn' onClick={goBack}><FontAwesomeIcon icon={faArrowLeft} /></button>
+      <div className='btn-container'>
+        <button className='back-btn' onClick={goBack}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+        <button className='back-btn' onClick={goForward}>
+          <FontAwesomeIcon icon={faArrowRight} />
+        </button>
+      </div>
+
       <div className='container'>
-      {board.map((rows, i) =>
+        {board.map((rows, i) =>
           rows.map((value, j) => (
             <BoxContainer
               key={`${i},${j}`}
@@ -96,16 +115,16 @@ function App() {
             />
           ))
         )}
-      </div> 
-        {winner &&
+      </div>
+
+      {winner && (
         <div className='win'>
           <h2>{winner === 'Draw' ? "It's a Draw!" : `Winner: ${winner}`}</h2>
-          {/* <h2>Winner: Umar</h2> */}
-          <button onClick={newGame}>NewGame</button>   
-        </div>   
-        }              
+          <button onClick={newGame}>New Game</button>
+        </div>
+      )}
     </div>
   );
 }
 
-export default App
+export default App;
