@@ -68,6 +68,7 @@ function App() {
     setBoard([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
     setWinner(null);
     setRemovedList([]);
+    setMoveX(true)
   };
 
   const goBack = () => {
@@ -100,6 +101,7 @@ function App() {
         <button className='backbtn' onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
+        <h2 className='turn'>Turn <span>{moveX ? "X" : "O"}</span></h2>
         <button className='backbtn' onClick={goForward}>
           <FontAwesomeIcon icon={faArrowRight} />
         </button>

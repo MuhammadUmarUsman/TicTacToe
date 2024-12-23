@@ -75,3 +75,9 @@
 .btn:hover,.backbtn:hover{
   cursor: pointer;
 }
+.turn{
+  font-weight: bold;
+}
+.turn span{
+  color: red;
+}
