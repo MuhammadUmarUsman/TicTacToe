@@ -6,7 +6,7 @@
   width: 100vw;
   height: 100vh;
   flex-direction: column;
-  gap:60px;
+  gap:70px;
 }
 
 .container {
@@ -37,14 +37,20 @@
   flex-direction: column;
   gap:5px;
 }
-
 .container-item:hover{
   cursor: pointer;
 }
 .btn-container{
-  width:650px;
+  width:400px;
   display: flex;
   justify-content: space-between;
+}
+.backbtn{
+  background: black;
+  color: white;
+  padding:10px;
+  border: none;
+  text-align: center;
 }
 .btn{
   width:110px;
@@ -66,6 +72,6 @@
 .bold{
   font-weight: bold;
 }
-.btn:hover{
+.btn:hover,.backbtn:hover{
   cursor: pointer;
 }

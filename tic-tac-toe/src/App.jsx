@@ -8,7 +8,7 @@ function App() {
   const [board, setBoard] = useState([[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]);
   const [moveX, setMoveX] = useState(true);
   const [winner, setWinner] = useState(null);
-  const [boardList, setBoardList] = useState([[[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]]);
+  const [boardList, setBoardList] = useState([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]);
   const [removedList, setRemovedList] = useState([]); 
 
   const checkWinner = (board) => {
@@ -73,8 +73,8 @@ function App() {
   const goBack = () => {
     if (boardList.length <= 1 || winner) return;
 
-    const updatedBoardList = [...boardList].slice(0, boardList.length - 1);
-    const previousBoardState = updatedBoardList[updatedBoardList.length - 1];
+    const updatedBoardList = boardList.slice(0, boardList.length - 1);
+    const previousBoardState = boardList[updatedBoardList.length - 1];
 
     setRemovedList((prevRemoved) => [...prevRemoved, boardList[boardList.length - 1]]);
     setBoardList(updatedBoardList);
@@ -95,10 +95,10 @@ function App() {
   return (
     <div className='App'>
       <div className='btn-container'>
-        <button className='btn' onClick={goBack}>
+        <button className='backbtn' onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
-        <button className='btn' onClick={goForward}>
+        <button className='backbtn' onClick={goForward}>
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
@@ -119,7 +119,7 @@ function App() {
       {!winner &&<button className='btn bgyellow' onClick={newGame}>Reset</button>}
       {winner && (
         <div className='win'>
-          <h2>{winner === 'Draw' ? "It's a Draw!" : `Winner: ${winner}`}</h2>
+          <h2>{winner === 'Draw' ? "It's a Draw!" : `Winner: ${winner}!`}</h2>
           <button className='btn bggreen bold' onClick={newGame}>New Game</button>
         </div>
       )}
