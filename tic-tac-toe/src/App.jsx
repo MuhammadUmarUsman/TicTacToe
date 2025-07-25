@@ -151,13 +151,13 @@ function App() {
 
   return (
     <div className='App'>
-      {!winner && (
+      {/* {!winner && (
         <GameControls
           moveX={moveX}
           goBack={goBack}
           goForward={goForward}
         />
-      )}
+      )} */}
       <h3>{isPlacementPhase() ? "Placement Phase" : "Movement Phase"}</h3>
 
       <div className='container'>
