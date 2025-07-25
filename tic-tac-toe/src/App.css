@@ -6,7 +6,7 @@
   width: 100vw;
   height: 100vh;
   flex-direction: column;
-  gap:70px;
+  gap:50px;
 }
 
 .container {
@@ -24,7 +24,7 @@
   padding: 20px;
   text-align: center;
   background:white;
-  border: 1px solid white;
+  border: 2px solid white;
 }
 
 .container-item h1{
@@ -80,4 +80,7 @@
 }
 .turn span{
   color: red;
+}
+.selected {
+  border: 2px solid red;
 }

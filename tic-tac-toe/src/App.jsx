@@ -9,6 +9,13 @@ function App() {
   const [winner, setWinner] = useState(null);
   const [boardList, setBoardList] = useState([[[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]]);
   const [removedList, setRemovedList] = useState([]);
+  const totalItems = 3;
+  const [selectedCell, setSelectedCell] = useState(null);
+  const [xCount, setXCount] = useState(0);
+  const [oCount, setOCount] = useState(0);
+
+
+  const isPlacementPhase = () => xCount < 3 || oCount < 3;
 
   const checkWinner = (board) => {
     for (let i = 0; i < 3; i++) {
@@ -34,31 +41,66 @@ function App() {
     return null;
   };
 
-  const handleClick = (i, j) => {
-    if (board[i][j] !== -1 || winner) {
-      return;
-    }
+ const handleClick = (i, j) => {
+    if (winner) return;
 
-    const newBoard = board.map((row, rowIndex) => {
-      if (rowIndex === i) {
-        return row.map((cell, colIndex) => {
-          if (colIndex === j) {
-            return moveX ? 1 : 0;
-          }
-          return cell;
-        });
+    const player = moveX ? 1 : 0;
+    const playerCount = moveX ? xCount : oCount;
+
+    if (isPlacementPhase()) {
+      if (board[i][j] !== -1 || playerCount >= 3) return;
+
+      const newBoard = board.map((row, rowIndex) =>
+        row.map((cell, colIndex) => (rowIndex === i && colIndex === j ? player : cell))
+      );
+
+      setBoard(newBoard);
+      setBoardList(prev => [...prev, newBoard]);
+      setRemovedList([]);
+
+      moveX ? setXCount(xCount + 1) : setOCount(oCount + 1);
+      setMoveX(!moveX);
+
+      const gameWinner = checkWinner(newBoard);
+      if (gameWinner !== null) {
+        setWinner(gameWinner === 1 ? 'X' : 'O');
       }
-      return row;
-    });
+    } else {
+      const cellValue = board[i][j];
 
-    setBoard(newBoard);
-    setBoardList((prevBoardList) => [...prevBoardList, newBoard]);
-    setMoveX(!moveX);
-    setRemovedList([]);
+      if (!selectedCell) {
+        if (cellValue === player) {
+          setSelectedCell({ i, j });
+        }
+        else if (cellValue !== -1) {
+          alert("You can't select your opponent's piece.");
+        } else {
+          alert("Please select your piece first.");
+        }
+      } else {
+        if (cellValue === -1) {
+          const newBoard = board.map(row => row.slice());
+          newBoard[selectedCell.i][selectedCell.j] = -1;
+          newBoard[i][j] = player;
 
-    const gameWinner = checkWinner(newBoard);
-    if (gameWinner !== null) {
-      setWinner(gameWinner === 'draw' ? 'Draw' : gameWinner === 1 ? 'X' : 'O');
+          setBoard(newBoard);
+          setBoardList(prev => [...prev, newBoard]);
+          setRemovedList([]);
+          setSelectedCell(null);
+          setMoveX(!moveX);
+
+          const gameWinner = checkWinner(newBoard);
+          if (gameWinner !== null) {
+            setWinner(gameWinner === 1 ? 'X' : 'O');
+          }
+        } else if (cellValue === player) {
+          setSelectedCell(null);
+        } else {
+          setSelectedCell(null);
+          console.log("Cant place here - already occupied")
+          alert("Cant place here - already occupied")
+        }
+      }
     }
   };
 
@@ -68,6 +110,9 @@ function App() {
     setWinner(null);
     setRemovedList([]);
     setMoveX(true);
+    setSelectedCell(null);
+    setXCount(0);
+    setOCount(0);
   };
 
   const goBack = () => {
@@ -80,6 +125,12 @@ function App() {
     setBoardList(updatedBoardList);
     setBoard(boardState);
     setMoveX(!moveX);
+
+    if (isPlacementPhase()) {
+      moveX ? setXCount(xCount - 1) : setOCount(oCount - 1);
+    }
+
+    setSelectedCell(null);
   };
 
   const goForward = () => {
@@ -90,6 +141,12 @@ function App() {
     setBoardList((prevBoardList) => [...prevBoardList, nextBoardState]);
     setBoard(nextBoardState);
     setMoveX(!moveX);
+
+    if (isPlacementPhase()) {
+      moveX ? setXCount(xCount + 1) : setOCount(oCount + 1);
+    }
+
+    setSelectedCell(null);
   };
 
   return (
@@ -101,6 +158,7 @@ function App() {
           goForward={goForward}
         />
       )}
+      <h3>{isPlacementPhase() ? "Placement Phase" : "Movement Phase"}</h3>
 
       <div className='container'>
         {board.map((rows, i) =>
@@ -111,6 +169,7 @@ function App() {
               col={j}
               value={value}
               handleClick={handleClick}
+              selected={selectedCell?.i === i && selectedCell?.j === j}
             />
           ))
         )}
